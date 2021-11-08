@@ -1,0 +1,9 @@
+[submodule "iapetus"]
+	path = iapetus
+	url = https://github.com/satiator/iapetus.git
+[submodule "newlib-cygwin"]
+	path = newlib-cygwin
+	url = git://sourceware.org/git/newlib-cygwin.git
+[submodule "libsatiator"]
+	path = libsatiator
+	url = https://github.com/satiator/libsatiator.git

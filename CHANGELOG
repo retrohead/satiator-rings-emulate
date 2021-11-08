@@ -1,0 +1,145 @@
+# v66
+
+## New features
+
+- Move low level API out to libsatiator, to be shared with other developers' apps: https://github.com/satiator/libsatiator
+- Don't autoboot if an app has explicitly requested to reset to the Satiator menu using libsatiator
+
+# v65
+
+## New features
+
+- Autobooting disc images. Files named autoboot.elf, autoboot.iso or autoboot.cue will be loaded automatically on startup, in that order of priority.
+- Ability to boot ELF files directly without having to go through SEGA logo, et cetera. This leaves the Satiator in API mode, which may require adjustments to your code.
+    Note that Jo Engine's "game.elf" is usually not an ELF file but instead a COFF; it can be converted by adding a rule like this to your makefile:
+
+real.elf: game.elf
+	# the actual conversion
+	$(CONV) -O elf32-sh $< temporary.elf
+	# ditch debug info and symbols for a much smaller file
+	$(CONV) temporary.elf --strip-all $@
+
+## Fixed
+
+- Reading flash ID from Am29F010, Am29F010A found in certain AR carts is fixed
+
+# v64
+
+## New features
+
+- Added a tools menu entry for diagnostic tools. Currently includes measuring SD card performance. Requires firmware 156.
+
+# v63
+
+## New features
+
+- Added a tools menu entry for formatting the SD card. Requires firmware 155 or higher.
+
+# v62
+
+## Fixed
+
+- When multiple controllers are connected, any of them can control the menu.
+- Controls are changed to be closer to the Saturn design language:
+    - D-pad left and right are page up/down
+    - B is cancel
+    - A and C are select
+- Add a completion message to AR erase function
+
+With thanks to ShadowofBob for the control & erase patches!
+
+# v61
+
+## New features
+
+- Support for CUE/BIN/WAV images, with many thanks to lifning for the patch!
+
+# v60
+
+## New features
+
+- Reset to menu on A+B+C+Start. This requires an AR cart running patched firmware 3, and Satiator firmware version 154.
+
+## Fixed
+
+- Fixed AR Flash detection for AT29C010A Flash chips, which needed a delay
+- When backing up an AR cart, length was calculated wrong, and only the first half backed up
+- Revert to requesting a BIOS clock change on startup; this causes flicker, but is the easiest way to get everything neat and tidy on an A+B+C+Start reset
+
+## Known issues
+
+- The VDP menu workaround which fixes the Croc missing head bug (amongst others) will not work after an A+B+C+Start reset.
+
+# v59
+
+## Fixed
+
+- The region free patch in v58 caused booting to fail on some consoles; this
+    has been fixed. The issue was that a boot variable is in two different places
+    depending on BIOS version. I had assumed the split was across v1.00/v1.01 in
+    the original patch. This new version checks directly where the variable
+    actually is, ignoring the version, so it should work on all systems.
+
+# v58
+
+## Fixed
+
+- Corrected region free booting to work with BIOS 1.00. As region-free is now
+    always enabled, the previous code would just hang after fading out and before
+    the SEGA logo.
+
+# v57
+
+## Improved
+
+- Support AR carts with an SST 29LE020 flash chip. Weirdly, this is a 3.3V
+    chip, but still appears in some carts.
+
+# v56
+
+## Improved
+
+- Support AR carts that have older SST Flash chips. These do not respond to the
+    JEDEC standard flash ID read command, which led to them not being recognised.
+
+# v55
+
+## Improved
+
+- Avoid changing clock on startup; avoids a TV resync
+- Messageboxes are less ugly and wrap text
+
+# v54 2020-10-20
+
+## Fixed
+
+- Fix hang if pressing C on the main menu.
+
+## Improved
+
+- Action Replay writing is faster when less has changed.
+- Some AR Flash chips are faster too.
+- Provide better error messages if Flash can't be initialised.
+
+# v53 2020-10-19
+
+## Fixed
+
+- Problems on exFAT-formatted SD cards caused by a lack of parent directory
+    information.  This included not auto-booting when entering a folder with a
+    single image, and an inability to move up directories in the hierarchy.
+
+# v52 2020-10-19
+
+## Added
+
+- Action Replay support. Backup, reflash, and erase AR cartridges.
+    Erasing the cartridge allows you to use it as a RAM expansion.
+    To do this with a stock AR cart, remove the AR and boot into the
+    Satiator menu before inserting the AR.
+
+# v51 2020-09-22
+
+## Added
+
+- Satiator RTC support. Files are now stamped on the SD card according to the Saturn's RTC.
