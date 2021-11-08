@@ -58,6 +58,6 @@ emulate.elf: menu.ld $(OBJS) $(COMPILER_DIR)/WINDOWS/sh-elf/lib/libiapetus.a $(C
 clean:
 	rm -rf *.o
 	rm -rf gui/*.o
-	rm -r out
+	rm -rf out
 
 .DELETE_ON_ERROR:
